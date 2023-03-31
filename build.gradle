@@ -3,28 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId 'com.github.abhilashsiyer'
-            artifactId 'mylib'
-            version '1.0.0'
-
-            from components.release
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/abhilashsiyer/mylib")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
-        }
-    }
-}
-
 android {
     namespace 'com.ams.mylib'
     compileSdk 33
@@ -56,4 +34,18 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.abhilashsiyer'
+                artifactId = 'mylib'
+                version = '1.0.1'
+            }
+        }
+    }
 }
